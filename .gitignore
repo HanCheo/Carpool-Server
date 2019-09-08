@@ -1,0 +1,16 @@
+# Optiona REPL history
+.node_repl_history
+
+#Ouyput of 'npm pack'
+*.tgz
+
+#Yarn Integrity file
+.yarn-integrity
+.npm-integrity
+
+# dotenv environment variables file
+.env
+
+# next.js buid outpuy
+.next
+node_modules
