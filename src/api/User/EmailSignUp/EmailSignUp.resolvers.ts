@@ -1,9 +1,13 @@
 import { Resolvers } from "../../../types/resolvers";
-import { EmailSignUpMutationArgs, EmailSignUpResponse } from "../../../types/graph";
+import {
+  EmailSignUpMutationArgs,
+  EmailSignUpResponse
+} from "../../../types/graph";
 import User from "../../../entities/User";
 import createJWT from "../../../utils/createJWT";
 import Verification from "../../../entities/Verification";
 import { sendVerificationEmail } from "../../../utils/sendEmail";
+import encryptToHash from "../../../utils/encryptToHash";
 
 const resolvers: Resolvers = {
   Mutation: {
@@ -11,8 +15,8 @@ const resolvers: Resolvers = {
       _,
       args: EmailSignUpMutationArgs
     ): Promise<EmailSignUpResponse> => {
-      const { email } = args;
       try {
+        const { email } = args;
         const exixtingUser = await User.findOne({ email });
         if (exixtingUser) {
           return {
@@ -26,6 +30,7 @@ const resolvers: Resolvers = {
             verified: true
           });
           if (phoneVerification) {
+            args.password = await encryptToHash(args.password);
             const newUser = await User.create({ ...args }).save();
             // --> sendEmail(newUser.email) 로하면 유저 계정으로 이메일 발송
             if (newUser.email) {

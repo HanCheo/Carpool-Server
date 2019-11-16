@@ -1,12 +1,12 @@
 import { Resolvers } from "../../../types/resolvers";
 import privateResolver from "../../../utils/privateResolver";
+import User from "../../../entities/User";
+import Chat from "../../../entities/Chat";
+import Message from "../../../entities/Message";
 import {
   SendChatMessageMutationArgs,
   SendChatMessageResponse
 } from "../../../types/graph";
-import User from "../../../entities/User";
-import Message from "../../../entities/Messages";
-import Chat from "../../../entities/Chat";
 
 const resolvers: Resolvers = {
   Mutation: {
@@ -26,7 +26,10 @@ const resolvers: Resolvers = {
                 chat,
                 user
               }).save();
-              pubSub.publish("newChatMessage", { MessageSubscription: message });
+              console.log("message", message);
+              pubSub.publish("newChatMessage", {
+                MessageSubscription: message
+              });
               return {
                 ok: true,
                 error: null,
@@ -35,14 +38,14 @@ const resolvers: Resolvers = {
             } else {
               return {
                 ok: false,
-                error: "권한없음",
+                error: "권한이 없습니다.",
                 message: null
               };
             }
           } else {
             return {
               ok: false,
-              error: "찾을 수 없습니다.",
+              error: "채팅을 찾을 수 없습니다.",
               message: null
             };
           }
@@ -57,5 +60,4 @@ const resolvers: Resolvers = {
     )
   }
 };
-
 export default resolvers;

@@ -15,13 +15,13 @@ const resolvers = {
           return (
             pickUpLat >= userLastLat - 0.05 &&
             pickUpLat <= userLastLat + 0.05 &&
-            pickUpLng <= userLastLng - 0.05 &&
-            pickUpLng >= userLastLng + 0.05
-          );
+            pickUpLng >= userLastLng - 0.05 &&
+            pickUpLng <= userLastLng + 0.05
+          )
         }
       )
     }
   }
-};
+}
 
 export default resolvers;

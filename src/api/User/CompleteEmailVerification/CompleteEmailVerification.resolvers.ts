@@ -1,7 +1,6 @@
 import { Resolvers } from "../../../types/resolvers";
 import privateResolver from "../../../utils/privateResolver";
 import User from "../../../entities/User";
-
 import Verification from "../../../entities/Verification";
 import {
   CompleteEmailVerificationMutationArgs,
@@ -34,7 +33,7 @@ const resolver: Resolvers = {
             } else {
               return {
                 ok: false,
-                error: "이메일을 확인할 수 없습니다."
+                error: "이메일이 없거나 이미 인증되었습니다."
               };
             }
           } catch (error) {

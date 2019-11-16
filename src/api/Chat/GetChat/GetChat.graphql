@@ -1,9 +1,8 @@
-type GetChatResponse {
-  ok: Boolean!
-  error: String
-  chat: Chat
+type GetChatResponse{
+  ok:Boolean!
+  error:String
+  chat:Chat
 }
-
-type Query {
-  GetChat(chatId: Int!): GetChatResponse!
+type Query{
+  GetChat(chatId:Int!):GetChatResponse!
 }

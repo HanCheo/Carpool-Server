@@ -1,25 +1,26 @@
-import { Resolvers } from "../../../types/resolvers";
 import privateResolver from "../../../utils/privateResolver";
-import User from "../../../entities/User";
-
 import { getRepository, Between } from "typeorm";
-
-import { GetNearbyRideResponse } from "../../../types/graph";
 import Ride from "../../../entities/Ride";
+import { GetNearbyRideResponse } from "../../../types/graph";
+import { Resolvers } from "../../../types/resolvers";
+import User from "../../../entities/User";
 
 const resolvers: Resolvers = {
   Query: {
     GetNearbyRide: privateResolver(
       async (_, __, { req }): Promise<GetNearbyRideResponse> => {
         const user: User = req.user;
-        const { lastLat, lastLng } = user;
-        if (user.isDriving) {
+        if (!user.isRiding && user.isDriving) {
+          const { lastLat, lastLng } = user;
           try {
-            const ride = await getRepository(Ride).findOne({
-              status: "REQUESTING",
-              pickupLat: Between(lastLat - 0.05, lastLat + 0.05),
-              pickUpLng: Between(lastLng - 0.05, lastLng + 0.05)
-            });
+            const ride = await getRepository(Ride).findOne(
+              {
+                status: "REQUESTING",
+                pickUpLat: Between(lastLat - 0.05, lastLng + 0.05),
+                pickUpLng: Between(lastLat - 0.05, lastLng + 0.05)
+              },
+              { relations: ["passenger"] }
+            );
             if (ride) {
               return {
                 ok: true,
@@ -43,7 +44,7 @@ const resolvers: Resolvers = {
         } else {
           return {
             ok: false,
-            error: "운전자가 아닙니다 운전자 등록을 해주세요.",
+            error: "운전자 등록을 해주세요",
             ride: null
           };
         }

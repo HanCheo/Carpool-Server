@@ -1,8 +1,6 @@
 import bcrypt from "bcrypt";
 import {
   BaseEntity,
-  BeforeInsert,
-  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -12,11 +10,9 @@ import {
 } from "typeorm";
 import { IsEmail } from "class-validator";
 import Chat from "./Chat";
-import Message from "./Messages";
+import Message from "./Message";
 import Ride from "./Ride";
 import Place from "./Place";
-
-const BCRTPT_ROUNDS = 10;
 
 @Entity()
 class User extends BaseEntity {
@@ -35,9 +31,6 @@ class User extends BaseEntity {
   @Column({ type: "text" })
   lastName: string;
 
-  @Column({ type: "int", nullable: true })
-  age: number;
-
   @Column({ type: "text", nullable: true })
   password: string;
 
@@ -50,7 +43,10 @@ class User extends BaseEntity {
   @Column({ type: "text", nullable: true })
   fbId: string;
 
-  @Column({ type: "text" })
+  @Column({ type: "text", nullable: true })
+  ggId: string;
+
+  @Column({ type: "text"})
   profilePhoto: string;
 
   @Column({ type: "boolean", default: false })
@@ -75,46 +71,49 @@ class User extends BaseEntity {
 
   @UpdateDateColumn() updateAt: string;
 
-  @OneToMany(type => Chat, chat => chat.passenger)
+  @OneToMany(
+    type => Chat,
+    chat => chat.passenger
+  )
   chatsAsPassenger: Chat[];
 
-  @OneToMany(type => Chat, chat => chat.driver)
+  @OneToMany(
+    type => Chat,
+    chat => chat.driver
+  )
   chatsAsDriver: Chat[];
 
-  @OneToMany(type => Message, message => message.chat)
+  @OneToMany(
+    type => Message,
+    message => message.chat
+  )
   messages: Message[];
 
-  @OneToMany(type => Ride, ride => ride.passenger)
+  @OneToMany(
+    type => Ride,
+    ride => ride.passenger
+  )
   ridesAsPassenger: Ride[];
 
-  @OneToMany(type => Ride, ride => ride.driver)
+  @OneToMany(
+    type => Ride,
+    ride => ride.driver
+  )
   ridesAsDriver: Ride[];
 
-  @OneToMany(type => Place, places => places.user)
+  @OneToMany(
+    type => Place,
+    places => places.user
+  )
   places: Place[];
 
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
 
-  public comparePassword(password: string): Promise<boolean> {
+  public async comparePassword(password: string): Promise<boolean> {
     return bcrypt.compare(password, this.password);
-  }
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  async savePassword(): Promise<void> {
-    if (this.password) {
-      const hashPassword = await this.hashPassword(this.password);
-      this.password = hashPassword;
-    }
-  }
-
-  private hashPassword(password: string): Promise<string> {
-    return bcrypt.hash(password, BCRTPT_ROUNDS);
   }
 }
 
 export default User;
-
-

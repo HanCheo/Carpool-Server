@@ -1,7 +1,7 @@
 import { Resolvers } from "src/types/resolvers";
 import { EmailSignInMutationArgs, EmailSignInResponse } from "src/types/graph";
 import User from "../../../entities/User";
-import createJWT from "../../../utils/createJWT"
+import createJWT from "../../../utils/createJWT";
 
 const resolvers: Resolvers = {
   Mutation: {
@@ -20,20 +20,19 @@ const resolvers: Resolvers = {
           };
         }
         const checkPassword = await user.comparePassword(password);
-        const token = createJWT(user.id)
-        if(checkPassword){
-            return {
-                ok: true,
-                error: null,
-                token
-            }
-        }
-        else {
-            return {
-                ok: false,
-                error: "패스워드가 잘못되었습니다.",
-                token: null
-            }
+        const token = createJWT(user.id);
+        if (checkPassword) {
+          return {
+            ok: true,
+            error: null,
+            token
+          };
+        } else {
+          return {
+            ok: false,
+            error: "패스워드가 잘못되었습니다.",
+            token: null
+          };
         }
       } catch (error) {
         return {

@@ -9,7 +9,7 @@ import decodeJWT from "./utils/documentJWT";
 const PORT: number | string = process.env.PORT || 4000;
 const PLAYGROUND_ENDPOINT: string = "/playground";
 const GRAPHQL_ENDPOINT: string = "/graphql";
-const SUBSCRIPTION_ENDPOINT: string = "/subscription";
+const SUBSCRIPTION_ENDPOINT: string = "/subscriptions";
 
 const appOtions: Options = {
   port: PORT,
@@ -18,16 +18,19 @@ const appOtions: Options = {
   subscriptions: {
     path: SUBSCRIPTION_ENDPOINT,
     onConnect: async connectionParams => {
-      const token = connectionParams["X-JWT"];
+      const token = await connectionParams["X-JWT"];
       if (token) {
         const user = await decodeJWT(token);
         if (user) {
           return {
             currentUser: user
           };
+        } else {
+          throw new Error("유저가 없습니다.");
         }
+      } else {
+        throw new Error("JWT가 없어 접속이 불가능합니다.");
       }
-      throw new Error("JWT가 없어 접속이 불가능합니다.")
     }
   }
 };

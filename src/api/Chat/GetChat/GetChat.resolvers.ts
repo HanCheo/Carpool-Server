@@ -24,14 +24,14 @@ const resolvers: Resolvers = {
           } else {
             return {
               ok: false,
-              error: "채팅방을 볼수 있는 권한이 없습니다.",
+              error: "채팅방을 볼 수 있는 권한이 없습니다.",
               chat: null
             };
           }
         } else {
           return {
             ok: false,
-            error: "Not found",
+            error: "찾을 수 없는 채팅방입니다.",
             chat: null
           };
         }
@@ -45,5 +45,4 @@ const resolvers: Resolvers = {
     })
   }
 };
-
 export default resolvers;

@@ -38,7 +38,7 @@ const resolver: Resolvers = {
       } else {
         return {
           ok: false,
-          error: "이미 인증된 메일입니다."
+          error: "이미 인증된 메일입니다. 로그인 해주세요."
         };
       }
     })

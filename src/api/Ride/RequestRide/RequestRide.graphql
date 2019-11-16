@@ -1,19 +1,20 @@
-type RequestRideResponse {
-  ok: Boolean!
-  error: String
-  ride: Ride
+type RequestRideResponse{
+  ok:Boolean!
+  error:String
+  ride:Ride
 }
 
-type Mutation {
+type Mutation{
   RequestRide(
-    pickUpAddress: String!
-    pickupLat: Float!
-    pickUpLng: Float!
-    dropOffAddress: String!
-    dropOffLat: Float!
-    dropOffLng: Float!
-    price: Float!
-    duration: String!
-    distance: String!
-  ): RequestRideResponse!
+    pickUpAddress:String!
+    pickUpLat:Float!
+    pickUpLng:Float!
+    departDuration: String!
+    dropOffAddress:String!
+    dropOffLat:Float!
+    dropOffLng:Float!
+    price:Float!
+    distance:String!
+    duration:String!
+  ):RequestRideResponse!
 }

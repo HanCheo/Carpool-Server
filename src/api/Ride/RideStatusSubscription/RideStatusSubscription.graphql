@@ -1,3 +1,4 @@
-type Subscription {
-  RideStatusSubscription: Ride
+
+type Subscription{
+  RideStatusSubscription:Ride
 }

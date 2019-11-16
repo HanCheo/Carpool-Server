@@ -22,7 +22,7 @@ type Subscription {
 }
 
 type SendChatMessageResponse {
-  ok: Boolean
+  ok: Boolean!
   error: String
   message: Message
 }
@@ -32,29 +32,30 @@ type Mutation {
   AddPlace(name: String!, lat: Float!, lng: Float!, address: String!, isFav: Boolean!): AddPlaceResponse!
   DeletePlace(placeId: Int!): DeletePlaceResponse
   EditPlace(placeId: Int!, name: String, isFav: Boolean): EditPlaceResponse!
-  RequestRide(pickUpAddress: String!, pickupLat: Float!, pickUpLng: Float!, dropOffAddress: String!, dropOffLat: Float!, dropOffLng: Float!, price: Float!, duration: String!, distance: String!): RequestRideResponse!
+  RequestRide(pickUpAddress: String!, pickUpLat: Float!, pickUpLng: Float!, departDuration: String!, dropOffAddress: String!, dropOffLat: Float!, dropOffLng: Float!, price: Float!, distance: String!, duration: String!): RequestRideResponse!
   UpdateRideStatus(rideId: Int!, status: StatusOptions!): UpdateRideStatusResponse!
   CompleteEmailVerification(key: String!): CompleteEmailVerificationResponse!
   CompletePhoneVerification(phoneNumber: String!, key: String!): CompletePhoneVerificationResponse!
   EmailSignIn(email: String!, password: String!): EmailSignInResponse!
-  EmailSignUp(firstName: String!, lastName: String!, email: String!, password: String!, profilePhoto: String!, age: Int!, phoneNumber: String!): EmailSignUpResponse!
+  EmailSignUp(firstName: String!, lastName: String!, email: String!, password: String!, profilePhoto: String!, phoneNumber: String!): EmailSignUpResponse!
   FacebookConnect(firstName: String!, lastName: String!, fbId: String!, email: String): FacebookConnectResponse!
+  GoogleConnect(firstName: String!, lastName: String!, ggId: String!, email: String, profilePhoto: String!): GoogleConnectResponse!
   ReportMovement(lastOrientation: Float, lastLat: Float, lastLng: Float): ReportMovementRespone!
   RequestEmailVerification: RequestEmailVerificationResponse!
   StartPhoneVerification(phoneNumber: String!): StartPhoneVerificationResponse!
   ToggleDrivingMode: ToggleDrivingModeResponse!
-  UpdateMyProfile(firstName: String, lastName: String, email: String, password: String, profilePhoto: String, age: Int): UpdateMyProfileResponse!
+  UpdateMyProfile(firstName: String, lastName: String, email: String, profilePhoto: String): UpdateMyProfileResponse!
 }
 
 type Chat {
   id: Int!
   messages: [Message]
-  passenger: User!
-  driver: User!
   passengerId: Int!
-  driverId: Int!
-  rideId: Int!
+  driverId: Int
+  driver: User!
+  passenger: User!
   ride: Ride!
+  rideId: Int
   createAt: String!
   updateAt: String
 }
@@ -62,9 +63,10 @@ type Chat {
 type Message {
   id: Int!
   text: String!
-  chat: Chat!
-  chatId: Int!
   user: User!
+  chatId: Int
+  chat: Chat!
+  userId: Int!
   createAt: String!
   updateAt: String
 }
@@ -125,33 +127,35 @@ type Ride {
   id: Int!
   status: String!
   pickUpAddress: String!
-  pickupLat: Float!
+  pickUpLat: Float!
   pickUpLng: Float!
   dropOffAddress: String!
   dropOffLat: Float!
   dropOffLng: Float!
   price: Float!
-  duration: String!
   distance: String!
+  duration: String!
+  departDuration: String
   driver: User
   driverId: Int
-  passengerId: Int!
-  passenger: User!
-  chatId: Int
   chat: Chat
+  chatId: Int
+  passenger: User!
+  passengerId: Int!
   createAt: String!
-  updateAt: String
+  updateAt: String!
 }
 
 type UpdateRideStatusResponse {
   ok: Boolean!
   error: String
+  rideId: Int
 }
 
 enum StatusOptions {
   ACCEPTED
   FINISHED
-  CANCELED
+  CANCLED
   REQUESTING
   ONROUTE
 }
@@ -197,6 +201,12 @@ type GetNearbyDriversResponse {
   drivers: [User]
 }
 
+type GoogleConnectResponse {
+  ok: Boolean!
+  error: String
+  token: String
+}
+
 type ReportMovementRespone {
   ok: Boolean!
   error: String
@@ -213,11 +223,10 @@ type User {
   verifiedEmail: Boolean!
   firstName: String!
   lastName: String!
-  age: Int
   password: String
   phoneNumber: String
   verifiedPhoneNumber: Boolean!
-  profilePhoto: String
+  profilePhoto: String!
   fullName: String
   isDriving: Boolean!
   isRiding: Boolean!
@@ -226,6 +235,7 @@ type User {
   lastLat: Float
   lastOrientation: Float
   fbId: String
+  ggId: String
   messages: [Message]
   ridesAsPassenger: [Ride]
   chatsAsPassenger: [Chat]

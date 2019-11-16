@@ -1,8 +1,11 @@
+import Ride from "../../../entities/Ride";
+import User from "../../../entities/User";
+import {
+  RequestRideMutationArgs,
+  RequestRideResponse
+} from "../../../types/graph";
 import { Resolvers } from "../../../types/resolvers";
 import privateResolver from "../../../utils/privateResolver";
-import { RequestRideMutationArgs, RequestRideResponse } from "src/types/graph";
-import User from "../../../entities/User";
-import Ride from "../../../entities/Ride";
 
 const resolvers: Resolvers = {
   Mutation: {
@@ -13,12 +16,11 @@ const resolvers: Resolvers = {
         { req, pubSub }
       ): Promise<RequestRideResponse> => {
         const user: User = req.user;
-        if (!user.isRiding && !user.isDriving) {
+        if (!user.isDriving) {
           try {
             const ride = await Ride.create({ ...args, passenger: user }).save();
             pubSub.publish("rideRequest", { NearbyRideSubscription: ride });
-            user.isRiding = true;
-            user.save();
+
             return {
               ok: true,
               error: null,
@@ -34,7 +36,7 @@ const resolvers: Resolvers = {
         } else {
           return {
             ok: false,
-            error: "한번에 두개 이상의 요청을 받거나 운전과 요청을 동시에 할 수 없습니다.",
+            error: "두개 이상의 요청을 동시에 하거나 운전과 요청을 동시에 할 수 없습니다.",
             ride: null
           };
         }

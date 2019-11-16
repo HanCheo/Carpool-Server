@@ -1,16 +1,15 @@
-type EmailSignUpResponse {
+type GoogleConnectResponse {
   ok: Boolean!
   error: String
   token: String
 }
 
 type Mutation {
-  EmailSignUp(
+  GoogleConnect(
     firstName: String!
     lastName: String!
-    email: String!
-    password: String!
+    ggId: String!
+    email: String
     profilePhoto: String!
-    phoneNumber: String!
-  ): EmailSignUpResponse!
+  ): GoogleConnectResponse!
 }

@@ -1,8 +1,5 @@
 # CarPool-Server
 
- GraphQL, Typescript, NodeJS 를 이용한 서버 백엔드 구축
-
-
 ## Resolvers
 
 ### Public Resolvers:

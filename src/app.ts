@@ -47,7 +47,7 @@ class App {
     //token은 headers부분에 있기 때문에 req에서 get을 해줌.
     // "X-JWT"는 token 부분을 칭할 변수명
     const token = req.get("X-JWT");
-    //token 안에 있는 id(createJWT.ts))를 찾고 해당아이디를 가진 user를 찾음.
+    //token 안에 있는 id(createJWT.ts)를 찾고 해당아이디를 가진 user를 찾음.
     if (token) {
       const user = await decodeJWT(token);
       if (user) {

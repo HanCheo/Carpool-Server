@@ -1,12 +1,12 @@
-type Chat {
-    id: Int!
-    messages: [Message]
-    passenger: User!
-    driver: User!
-    passengerId: Int!
-    driverId: Int!
-    rideId: Int!
-    ride:Ride!
-    createAt: String!
-    updateAt: String
+type Chat{
+  id:Int!
+  messages:[Message]
+  passengerId:Int!
+  driverId:Int
+  driver:User!
+  passenger:User!
+  ride:Ride!
+  rideId:Int
+  createAt:String!
+  updateAt:String
 }

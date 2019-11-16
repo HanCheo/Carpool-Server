@@ -6,12 +6,12 @@ const resolvers = {
     RideStatusSubscription: {
       subscribe: withFilter(
         (_, __, { pubSub }) => pubSub.asyncIterator("rideUpdate"),
-        (payload, args, { context }) => {
+        (payload, _, { context }) => {
           const user: User = context.currentUser;
           const {
-            RideStatusSubscription: { driverId, passangerId }
+            RideStatusSubscription: { driverId, passengerId }
           } = payload;
-          return user.id === driverId || user.id === passangerId;
+          return user.id === driverId || user.id === passengerId;
         }
       )
     }
